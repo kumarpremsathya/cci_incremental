@@ -125,7 +125,8 @@ def download_pdfs_web(df, download_dir, browser):
                     
                     final_excel_sheet_name = f"final_sheet_{cci_config.current_date}.xlsx"
                    
-                    final_excel_sheet_path = fr"C:\Users\Premkumar.8265\Desktop\cci_project\data\final_excel_sheet\{final_excel_sheet_name}"
+                    final_excel_sheet_path = fr"C:\Users\Premkumar.8265\Desktop\cci_project\cci_incremental\data\final_excel_sheet\{final_excel_sheet_name}"
+                    
                     df.to_excel(final_excel_sheet_path, index=False)
                     # print("excel in download pdf", df)
                                 
@@ -239,7 +240,8 @@ def retry_failed_downloads(download_dir, browser):
 def download_pdf(increment_data_excel_path):
     print("download pdf funtion is called")
     try:
-        download_dir = os.path.join("C:\\Users\\Premkumar.8265\\Desktop\\cci_project", "cci_43")
+        download_dir = os.path.join("C:\\Users\\Premkumar.8265\\Desktop\\cci_project\\cci_incremental", "cci_43")
+       
         # base_dir = os.path.dirname(os.path.abspath(__file__))  # Base directory for the project
         # download_dir = os.path.join(base_dir, "cci_43")
         browser = initialize_browser(download_dir)
@@ -259,13 +261,14 @@ def download_pdf(increment_data_excel_path):
         
         final_excel_sheet_name = f"final_sheet_{cci_config.current_date}.xlsx"
         
-        final_excel_sheet_path = fr"C:\Users\Premkumar.8265\Desktop\cci_project\data\final_excel_sheet\{final_excel_sheet_name}"
+        final_excel_sheet_path = fr"C:\Users\Premkumar.8265\Desktop\cci_project\cci_incremental\data\final_excel_sheet\{final_excel_sheet_name}"
         # df.to_excel(final_excel_sheet_path, index=False)
         print("final excel path in download\n", df.to_string)
        
-        insert_excel_sheet_data_to_mysql.insert_excel_data_to_mysql(final_excel_sheet_path, cci_config.cursor)
+        insert_excel_sheet_data_to_mysql.insert_excel_data_to_mysql(final_excel_sheet_path)
         
     except Exception as e:
+        print("Error in download_pdf  :", e)
         exc_type, exc_obj, exc_tb = sys.exc_info()
         print(f"Error occurred at line {exc_tb.tb_lineno}:")
         print(f"Exception Type: {exc_type}")

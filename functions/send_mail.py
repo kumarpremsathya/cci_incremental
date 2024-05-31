@@ -34,11 +34,10 @@ def send_email(subject, message):
 
     except Exception as e:
         cci_config.log_list[1] = "Failure"
-        cci_config.log_list[4] = get_data_count_database.get_data_count_database(cci_config.cursor)
+        cci_config.log_list[4] = get_data_count_database.get_data_count_database()
         cci_config.log_list[5] = "error in sending mail part"
         print(cci_config.log_list)
-        log.insert_log_into_table(cci_config.cursor, cci_config.log_list)
-        cci_config.connection.commit()
+        log.insert_log_into_table(cci_config.log_list)
         cci_config.log_list = [None] * 8
         traceback.print_exc()
         sys.exit("script error")

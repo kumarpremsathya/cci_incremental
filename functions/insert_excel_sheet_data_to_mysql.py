@@ -5,10 +5,11 @@ import mysql.connector
 from config import cci_config
 from functions import get_data_count_database, send_mail, log
 
+connection = cci_config.db_connection()
+cursor = connection.cursor()
 
 
-
-def insert_excel_data_to_mysql(final_excel_sheets_path, cursor):
+def insert_excel_data_to_mysql(final_excel_sheets_path):
     print("insert_excel_data_to_mysql function is called")
 
     try:
@@ -42,7 +43,7 @@ def insert_excel_data_to_mysql(final_excel_sheets_path, cursor):
             
             cursor.execute(insert_query, values)
 
-        cci_config.connection.commit()
+        connection.commit()
       
 
 
@@ -51,25 +52,32 @@ def insert_excel_data_to_mysql(final_excel_sheets_path, cursor):
         cci_config.log_list[1] = "Success"
         cci_config.log_list[2] = cci_config.no_data_avaliable
         cci_config.log_list[3] = cci_config.no_data_scraped
-        cci_config.log_list[4] = get_data_count_database.get_data_count_database(cci_config.cursor)
+        cci_config.log_list[4] = get_data_count_database.get_data_count_database()
+        cci_config.log_list[6] = f"{cci_config.updated_count} rows updated"
         print("log table====", cci_config.log_list)
-        log.insert_log_into_table(cci_config.cursor, cci_config.log_list)
-        cci_config.connection.commit()
-        cci_config.connection.close()
+        log.insert_log_into_table(cci_config.log_list)
+        connection.commit()
+        connection.close()
         cci_config.log_list = [None] * 8
         print("Data inserted into the database table")
 
 
     except Exception as e:
         cci_config.log_list[1] = "Failure"
-        cci_config.log_list[4] = get_data_count_database.get_data_count_database(cci_config.cursor)
+        cci_config.log_list[4] = get_data_count_database.get_data_count_database()
         cci_config.log_list[5] = "error in insert part"
         print("log table====", cci_config.log_list)
-        log.insert_log_into_table(cci_config.cursor, cci_config.log_list)
-        cci_config.connection.commit()
+        log.insert_log_into_table(cci_config.log_list)
+        connection.commit()
         cci_config.log_list = [None] * 8
         traceback.print_exc()
         send_mail.send_email("cci section 43 orders Data inserted into the database error", e)
+        
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        print(f"Error occurred at line {exc_tb.tb_lineno}:")
+        print(f"Exception Type: {exc_type}")
+        print(f"Exception Object: {exc_obj}")
+        print(f"Traceback: {exc_tb}")
         sys.exit("script error")
         
         

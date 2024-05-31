@@ -11,7 +11,8 @@ def main():
         
         first_excel_sheet_name =f"first_excel_sheet_{cci_config.current_date}.xlsx"
     
-        first_exceL_sheet_path = rf"C:\Users\Premkumar.8265\Desktop\cci_project\data\first_excel_sheet\{first_excel_sheet_name}"
+        first_exceL_sheet_path = rf"C:\Users\Premkumar.8265\Desktop\cci_project\cci_incremental\data\first_excel_sheet\{first_excel_sheet_name}"
+        
   
         check_increment_data.check_increment_data(first_exceL_sheet_path)
         print("finished")
@@ -19,24 +20,36 @@ def main():
 
     elif cci_config.source_status == "Hibernated":
         cci_config.log_list[1] = "not run"
-        cci_config.log_list[4] = get_data_count_database.get_data_count_database(cci_config.cursor)
+        cci_config.log_list[4] = get_data_count_database.get_data_count_database()
         print(cci_config.log_list)
-        log.insert_log_into_table(cci_config.cursor, cci_config.log_list)
-        cci_config.connection.commit()
-        print(cci_config.log_list)
-        cci_config.log_list = [None] * 8
-        traceback.print_exc()
-        sys.exit("script error")
+        log.insert_log_into_table(cci_config.log_list)
 
+        
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        print(f"Error occurred at line {exc_tb.tb_lineno}:")
+        print(f"Exception Type: {exc_type}")
+        print(f"Exception Object: {exc_obj}")
+        print(f"Traceback: {exc_tb}")
+        
+        
     elif cci_config.source_status == "Inactive":
         cci_config.log_list[1] = "not run"
-        cci_config.log_list[4] = get_data_count_database.get_data_count_database(cci_config.cursor)
-        print(cci_config.log_list)
-        log.insert_log_into_table(cci_config.cursor, cci_config.log_list)
-        cci_config.connection.commit()
+        cci_config.log_list[4] = get_data_count_database.get_data_count_database()
         print(cci_config.log_list)
         cci_config.log_list = [None] * 8
         traceback.print_exc()
+
+        print(cci_config.log_list)
+        log.insert_log_into_table(cci_config.log_list)
+        
+        print(cci_config.log_list)
+        cci_config.log_list = [None] * 8
+        traceback.print_exc()
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        print(f"Error occurred at line {exc_tb.tb_lineno}:")
+        print(f"Exception Type: {exc_type}")
+        print(f"Exception Object: {exc_obj}")
+        print(f"Traceback: {exc_tb}")
         sys.exit("script error")
 
 

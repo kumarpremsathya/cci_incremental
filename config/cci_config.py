@@ -11,13 +11,13 @@ no_data_avaliable = 0
 no_data_scraped = 0
 deleted_sources = ""
 deleted_source_count = 0
-
+updated_count = 0
 
 url = 'https://www.cci.gov.in/combination/orders-section43a_44'
 
-# download_folder = r"C:\Users\mohan.7482\Desktop\CCI\incremental_cci_anti_profiteering\data\pdf"
+download_folder= r"C:\Users\Premkumar.8265\Desktop\cci_project\cci_incremental\cci_43"
 
-download_folder= r"C:\Users\Premkumar.8265\Desktop\cci_project\cci_43"
+bandit_path =r"C:\Users\Premkumar.8265\AppData\Roaming\Python\Python311\Scripts"
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument(f"--disable-notifications")  
@@ -47,14 +47,14 @@ database = "cci_43"
 # password = "Mysql1234$"
 # database = "cci"
 # auth_plugin = "mysql_native_password"
+def db_connection():
+    connection = mysql.connector.connect(
+        host = host,
+        user = user,
+        password = password,
+        database = database,
+        # auth_plugin = auth_plugin
 
-connection = mysql.connector.connect(
-    host = host,
-    user = user,
-    password = password,
-    database = database,
-    # auth_plugin = auth_plugin
+    )
+    return connection
 
-)
-
-cursor = connection.cursor()

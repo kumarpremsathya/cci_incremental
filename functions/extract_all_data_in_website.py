@@ -85,36 +85,44 @@ def extract_all_data_in_website():
                 print(f"Error in scrape_all_pages: {e}")
                 break
         # return all_data
+          
                
+        # Convert data to DataFrame
+        columns = [
+                'combination_reg_no',
+                'description',
+                'under_section',
+                'decision_date',
+                'order_link']
+        df = pd.DataFrame(all_data, columns=columns)
+        first_excel_sheet_name =f"first_excel_sheet_{cci_config.current_date}.xlsx"
+        # first_exceL_sheet_path = rf"C:\Users\mohan.7482\Desktop\CCI\incremental_cci_anti_profiteering\data\first_excel_sheet\{first_excel_sheet_name}"
+
+        first_exceL_sheet_path = rf"C:\Users\Premkumar.8265\Desktop\cci_project\cci_incremental\data\first_excel_sheet\{first_excel_sheet_name}"
+        
+    
+        df.to_excel(first_exceL_sheet_path,index = False)
+        check_increment_data.check_increment_data(first_exceL_sheet_path)
         
 
     except Exception as e:
             cci_config.log_list[1] = "Failure"
-            cci_config.log_list[4] = get_data_count_database.get_data_count_database(cci_config.cursor)
+            cci_config.log_list[4] = get_data_count_database.get_data_count_database()
             cci_config.log_list[5] = "error in data extraction part"
             print("error in data extraction part======", cci_config.log_list)
-            log.insert_log_into_table(cci_config.cursor, cci_config.log_list)
-            cci_config.connection.commit()
+            log.insert_log_into_table(cci_config.log_list)
             cci_config.log_list = [None] * 8
             traceback.print_exc()
             send_mail.send_email("cci section 43 orders extract data in website error", e)
+            
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            print(f"Error occurred at line {exc_tb.tb_lineno}:")
+            print(f"Exception Type: {exc_type}")
+            print(f"Exception Object: {exc_obj}")
+            print(f"Traceback: {exc_tb}")
             sys.exit("script error")
 
 
 
-    # Convert data to DataFrame
-    columns = [
-            'combination_reg_no',
-            'description',
-            'under_section',
-            'decision_date',
-            'order_link']
-    df = pd.DataFrame(all_data, columns=columns)
-    first_excel_sheet_name =f"first_excel_sheet_{cci_config.current_date}.xlsx"
-    # first_exceL_sheet_path = rf"C:\Users\mohan.7482\Desktop\CCI\incremental_cci_anti_profiteering\data\first_excel_sheet\{first_excel_sheet_name}"
-
-    first_exceL_sheet_path = rf"C:\Users\Premkumar.8265\Desktop\cci_project\data\first_excel_sheet\{first_excel_sheet_name}"
-
-    df.to_excel(first_exceL_sheet_path,index = False)
-    check_increment_data.check_increment_data(first_exceL_sheet_path)
+    
 
