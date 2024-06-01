@@ -114,7 +114,13 @@ def download_pdfs_web(df, download_dir, browser):
 
                     destination_path = os.path.join(month_folder, pdf_name)
                     shutil.move(download_path, destination_path)
-                    relative_pdf_path = os.path.relpath(destination_path)
+                    
+                    # Calculate relative path from the cci_43 directory
+                    # cci_43_dir = r"C:\Users\Premkumar.8265\Desktop\cci_project\cci_incremental\cci_43"
+                    relative_pdf_path = os.path.relpath(destination_path, download_dir)
+                    
+                    relative_pdf_path = os.path.join(os.path.basename(download_dir), relative_pdf_path)
+                    
                     print("relative_pdf_path", relative_pdf_path)
                     df.at[index, 'orderpdf_file_path'] = relative_pdf_path
                     
@@ -240,9 +246,11 @@ def retry_failed_downloads(download_dir, browser):
 def download_pdf(increment_data_excel_path):
     print("download pdf funtion is called")
     try:
-        download_dir = os.path.join("C:\\Users\\Premkumar.8265\\Desktop\\cci_project\\cci_incremental", "cci_43")
+        
+        download_dir = r"C:\Users\Premkumar.8265\Desktop\cci_project\cci_incremental\cci_43"
        
-        # base_dir = os.path.dirname(os.path.abspath(__file__))  # Base directory for the project
+        # base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'cci_incremental')
+        # print("base_dir====", base_dir)
         # download_dir = os.path.join(base_dir, "cci_43")
         browser = initialize_browser(download_dir)
         

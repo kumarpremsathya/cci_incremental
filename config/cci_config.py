@@ -15,37 +15,37 @@ updated_count = 0
 
 url = 'https://www.cci.gov.in/combination/orders-section43a_44'
 
-download_folder= r"C:\Users\Premkumar.8265\Desktop\cci_project\cci_incremental\cci_43"
+# download_folder= r"C:\Users\Premkumar.8265\Desktop\cci_project\cci_incremental\cci_43"
 
-bandit_path =r"C:\Users\Premkumar.8265\AppData\Roaming\Python\Python311\Scripts"
+# bandit_path =r"C:\Users\Premkumar.8265\AppData\Roaming\Python\Python311\Scripts"
 
 chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument(f"--disable-notifications")  
-chrome_options.add_experimental_option("prefs", {
-    "download.default_directory": download_folder,
-    "download.prompt_for_download": False,
-    "download.directory_upgrade": True
-})
+# chrome_options.add_argument(f"--disable-notifications")  
+# chrome_options.add_experimental_option("prefs", {
+#     "download.default_directory": download_folder,
+#     "download.prompt_for_download": False,
+#     "download.directory_upgrade": True
+# })
 browser = webdriver.Chrome(options=chrome_options)
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 
 
 
-host = "localhost"
-user = "root"
-password = "root"
-database = "cci_43"
+# host = "localhost"
+# user = "root"
+# password = "root"
+# database = "cci_43"
 # auth_plugin = "mysql_native_password"
 
 
 
 
 
-# host = "4.213.77.165"
-# user = "root1"
-# password = "Mysql1234$"
-# database = "cci"
+host = "4.213.77.165"
+user = "root1"
+password = "Mysql1234$"
+database = "cci"
 # auth_plugin = "mysql_native_password"
 def db_connection():
     connection = mysql.connector.connect(

@@ -8,7 +8,7 @@ def insert_log_into_table(log_list):
     print("insert_log_into_table function is called")
     try:
         query = """
-            INSERT INTO cci_43_log (source_name, script_status, data_available, data_scraped, total_record_count, failure_reason, comments, deleted_source, deleted_source_count, source_status)
+            INSERT INTO cci_log (source_name, script_status, data_available, data_scraped, total_record_count, failure_reason, comments, deleted_source, deleted_source_count, source_status)
             VALUES (%(source_name)s, %(script_status)s, %(data_available)s, %(data_scraped)s, %(total_record_count)s, %(failure_reason)s, %(comments)s, %(deleted_source)s, %(deleted_source_count)s, %(source_status)s)
         """
         values = {

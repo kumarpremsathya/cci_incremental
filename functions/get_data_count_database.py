@@ -7,7 +7,7 @@ cursor = connection.cursor()
 def get_data_count_database():
     try:
         print("get_data_count_database function is called")
-        cursor.execute("SELECT COUNT(*) FROM cci_orders;")
+        cursor.execute("SELECT COUNT(*) FROM cci_orders_section43a_44;")
         # print("count from database",cursor.fetchone()[0])
         # return cursor.fetchone()[0]
 
