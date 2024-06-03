@@ -71,11 +71,11 @@ def check_increment_data(excel_path):
             excel_row = excel_df[excel_df["order_link"] == db_row["order_link"]]
             if not excel_row.empty:
                 excel_row = excel_row.iloc[0]
-                
+
                 # Normalizing the data types for accurate comparison
                 db_row_normalized = db_row.copy()
                 excel_row_normalized = excel_row.copy()
-                
+
                 db_row_normalized["decision_date"] = pd.to_datetime(db_row_normalized["decision_date"], dayfirst=True, errors='coerce')
                 excel_row_normalized["decision_date"] = pd.to_datetime(excel_row_normalized["decision_date"], dayfirst=True, errors='coerce')
 
@@ -83,26 +83,32 @@ def check_increment_data(excel_path):
                 for col in ["combination_reg_no", "description", "under_section", "order_link"]:
                     db_row_normalized[col] = db_row_normalized[col] if pd.isnull(db_row_normalized[col]) else str(db_row_normalized[col]).strip()
                     excel_row_normalized[col] = excel_row_normalized[col] if pd.isnull(excel_row_normalized[col]) else str(excel_row_normalized[col]).strip()
-                
-                # Detailed logging for comparison
-                # print(f"Comparing db_row: {db_row_normalized.to_dict()}")
-                # print(f"with excel_row: {excel_row_normalized.to_dict()}")
 
                 # Comparison logic
                 significant_difference = False
                 for column in ["combination_reg_no", "description", "under_section", "decision_date"]:
-                    if pd.isnull(db_row_normalized[column]) and pd.isnull(excel_row_normalized[column]):
+                    db_value = db_row_normalized[column]
+                    excel_value = excel_row_normalized[column]
+
+                    if pd.isnull(db_value) and pd.isnull(excel_value):
                         continue
-                    if db_row_normalized[column] != excel_row_normalized[column]:
-                        print(f"Difference found in column: {column}, db_value: {db_row_normalized[column]}, excel_value: {excel_row_normalized[column]}")
+
+                    if isinstance(db_value, str):
+                        db_value = db_value.strip()
+
+                    if isinstance(excel_value, str):
+                        excel_value = excel_value.strip()
+
+                    if db_value != excel_value:
+                        print(f"Difference found in column: {column}, db_value: {db_value}, excel_value: {excel_value}")
                         significant_difference = True
                         break
 
                 if significant_difference:
                     updated_rows_in_db.append(db_row)
                     updated_rows_in_excel.append(excel_row)
-
-
+                    
+                    
         
         print("updated_rows_in_db===\n\n\n", updated_rows_in_db)
         print("updated_rows_in_excel===\n\n\n", updated_rows_in_excel)
