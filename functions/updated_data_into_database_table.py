@@ -66,6 +66,10 @@ def updated_data_into_database_table(updated_rows_in_db, updated_rows_in_excel):
             # Check if each relevant field has changed and build the update query accordingly
             fields_to_update = []
             values = []
+            
+            if db_row["combination_reg_no"] != excel_row["combination_reg_no"]:
+                fields_to_update.append("combination_reg_no = %s")
+                values.append(excel_row["combination_reg_no"])
 
             if db_row["description"] != excel_row["description"]:
                 fields_to_update.append("description = %s")

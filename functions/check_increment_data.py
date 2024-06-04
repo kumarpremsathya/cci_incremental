@@ -67,6 +67,7 @@ def check_increment_data(excel_path):
         database_df = database_df.reset_index(drop=True)
         excel_df = excel_df.reset_index(drop=True)
 
+
         for index, db_row in database_df.iterrows():
             excel_row = excel_df[excel_df["order_link"] == db_row["order_link"]]
             if not excel_row.empty:
