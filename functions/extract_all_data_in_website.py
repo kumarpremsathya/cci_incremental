@@ -20,6 +20,7 @@ from functions import get_data_count_database, check_increment_data, send_mail, 
 browser = cci_config.browser
 all_data = []  # Define as global variable
 
+
 # Function to scrape data from the table on the current page
 def scrape_table(browser):
     data = []
@@ -37,14 +38,11 @@ def scrape_table(browser):
             anchor_tag = cols[-1].find_element(By.TAG_NAME, 'a')
             link = anchor_tag.get_attribute('href')
             cols_text[-1] = link
-             
             # Skip the first column (No.) and only add the relevant data
             data.append(cols_text[1:])
-            
     except Exception as e:
         print(f"Error in scrape_table: {e}")
     return data
-
 
 
 # Function to handle pagination and scrape all pages
@@ -53,20 +51,22 @@ def extract_all_data_in_website():
     print("extract_all_data_in_website function is called")
 
     try:
-        browser.get(cci_config.url)
-        time.sleep(2)
-        browser.maximize_window()
+        # Try to open the URL
+        try:
+            browser.get(cci_config.url)
+            time.sleep(5)
+            browser.maximize_window()
+        except Exception as e:
+            raise Exception("Website not opened correctly") from e
         
-    
+
         # Scrape the first page
         first_page_data = scrape_table(browser)
         all_data.extend(first_page_data)
-        
         # Print the data from the first page to the terminal
         print("First page data:")
         for row in first_page_data:
             print("row=======", row)
-        
         while True:
             try:
                 time.sleep(5)
@@ -84,43 +84,42 @@ def extract_all_data_in_website():
             except Exception as e:
                 print(f"Error in scrape_all_pages: {e}")
                 break
-        # return all_data
-          
-               
-        # Convert data to DataFrame
+                # return all_data
+                # Convert data to DataFrame
+
+
         columns = [
-                'combination_reg_no',
-                'description',
-                'under_section',
-                'decision_date',
-                'order_link']
+            'combination_reg_no',
+            'description',
+            'under_section',
+            'decision_date',
+            'order_link']
         df = pd.DataFrame(all_data, columns=columns)
-        first_excel_sheet_name =f"first_excel_sheet_{cci_config.current_date}.xlsx"
+        first_excel_sheet_name = f"first_excel_sheet_{cci_config.current_date}.xlsx"
         # first_exceL_sheet_path = rf"C:\Users\mohan.7482\Desktop\CCI\incremental_cci_anti_profiteering\data\first_excel_sheet\{first_excel_sheet_name}"
-
         first_exceL_sheet_path = rf"C:\Users\Premkumar.8265\Desktop\cci_project\cci_incremental\data\first_excel_sheet\{first_excel_sheet_name}"
-        
-    
-        df.to_excel(first_exceL_sheet_path,index = False)
+     
+        df.to_excel(first_exceL_sheet_path, index = False)
+        print("df========\n\n", df.to_string( ))
         check_increment_data.check_increment_data(first_exceL_sheet_path)
-        
-
     except Exception as e:
-            cci_config.log_list[1] = "Failure"
-            cci_config.log_list[4] = get_data_count_database.get_data_count_database()
-            cci_config.log_list[5] = "error in data extraction part"
-            print("error in data extraction part======", cci_config.log_list)
-            log.insert_log_into_table(cci_config.log_list)
-            cci_config.log_list = [None] * 8
-            traceback.print_exc()
-            send_mail.send_email("cci section 43 orders extract data in website error", e)
-            
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            print(f"Error occurred at line {exc_tb.tb_lineno}:")
-            print(f"Exception Type: {exc_type}")
-            print(f"Exception Object: {exc_obj}")
-            print(f"Traceback: {exc_tb}")
-            sys.exit("script error")
+        cci_config.log_list[1] = "Failure"
+        cci_config.log_list[4] = get_data_count_database.get_data_count_database()
+        if str(e) == "Website not opened correctly":
+            cci_config.log_list[5] = "Website is not opened"
+        else:
+            cci_config.log_list[5] = "Error in data extraction part"
+        print("error in data extraction part======", cci_config.log_list)
+        log.insert_log_into_table(cci_config.log_list)
+        cci_config.log_list = [None] * 8
+        traceback.print_exc()
+        send_mail.send_email("cci section 43 orders extract data in website error", e)
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        print(f"Error occurred at line {exc_tb.tb_lineno}:")
+        print(f"Exception Type: {exc_type}")
+        print(f"Exception Object: {exc_obj}")
+        print(f"Traceback: {exc_tb}")
+        sys.exit("script error")
 
 
 

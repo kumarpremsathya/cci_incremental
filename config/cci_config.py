@@ -3,7 +3,7 @@ import mysql.connector
 from selenium import webdriver
 
 source_status = "Active"
-source_name = "cci_orders_section43a_44"
+source_name = "cci_section43a_44"
 
 
 log_list = [None] * 8
@@ -32,20 +32,20 @@ current_date = datetime.now().strftime("%Y-%m-%d")
 
 
 
-host = "localhost"
-user = "root"
-password = "root"
-database = "cci_43"
+# host = "localhost"
+# user = "root"
+# password = "root"
+# database = "cci_43"
 # auth_plugin = "mysql_native_password"
 
 
 
 
 
-# host = "4.213.77.165"
-# user = "root1"
-# password = "Mysql1234$"
-# database = "cci"
+host = "4.213.77.165"
+user = "root1"
+password = "Mysql1234$"
+database = "cci"
 # auth_plugin = "mysql_native_password"
 def db_connection():
     connection = mysql.connector.connect(

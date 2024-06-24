@@ -1,8 +1,10 @@
 from config import cci_config
 import sys
 
+
 connection = cci_config.db_connection()
 cursor = connection.cursor()
+
 
 def insert_log_into_table(log_list):
     print("insert_log_into_table function is called")
@@ -22,16 +24,14 @@ def insert_log_into_table(log_list):
             'deleted_source': cci_config.deleted_sources,
             'deleted_source_count': cci_config.deleted_source_count,
             'source_status': cci_config.source_status
-        
         }
-
         cursor.execute(query, values)
         connection.commit()
-    
     except Exception as e:
-            print("Error in insert_log_into_table :", e)
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            print(f"Error occurred at line {exc_tb.tb_lineno}:")
-            print(f"Exception Type: {exc_type}")
-            print(f"Exception Object: {exc_obj}")
-            print(f"Traceback: {exc_tb}")
+        print("Error in insert_log_into_table :", e)
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        print(f"Error occurred at line {exc_tb.tb_lineno}:")
+        print(f"Exception Type: {exc_type}")
+        print(f"Exception Object: {exc_obj}")
+        print(f"Traceback: {exc_tb}")
+           
