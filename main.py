@@ -7,11 +7,11 @@ from functions import extract_all_data_in_website, log, get_data_count_database,
 def main():
     print("main function is called")
     if cci_config.source_status == "Active":
-        # extract_all_data_in_website.extract_all_data_in_website()
+        extract_all_data_in_website.extract_all_data_in_website()
         
-        first_excel_sheet_name =f"first_excel_sheet_{cci_config.current_date}.xlsx"
-        first_exceL_sheet_path = rf"C:\Users\Premkumar.8265\Desktop\cci_project\cci_incremental\data\first_excel_sheet\{first_excel_sheet_name}"
-        check_increment_data.check_increment_data(first_exceL_sheet_path)
+        # first_excel_sheet_name =f"first_excel_sheet_{cci_config.current_date}.xlsx"
+        # first_exceL_sheet_path = rf"C:\Users\Premkumar.8265\Desktop\cci_project\cci_incremental\data\first_excel_sheet\{first_excel_sheet_name}"
+        # check_increment_data.check_increment_data(first_exceL_sheet_path)
         print("finished")
 
 

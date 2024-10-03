@@ -8,6 +8,7 @@ from config import cci_config
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, WebDriverException, NoSuchElementException
 from functions import get_data_count_database, check_increment_data, send_mail, log
 
 
@@ -56,7 +57,10 @@ def extract_all_data_in_website():
             browser.get(cci_config.url)
             time.sleep(5)
             browser.maximize_window()
-        except Exception as e:
+            time.sleep(2)
+            next_button = browser.find_element(By.CSS_SELECTOR, '#datatable_ajax_next a')
+            time.sleep(2)
+        except (TimeoutException, WebDriverException, NoSuchElementException) as e:
             raise Exception("Website not opened correctly") from e
         
 
@@ -81,8 +85,12 @@ def extract_all_data_in_website():
                     )
                     # Scrape the data from the new page
                     all_data.extend(scrape_table(browser))
+                    
+            except (TimeoutException, NoSuchElementException) as e:
+                print(f"Error in pagination: {e}")
+                break
             except Exception as e:
-                print(f"Error in scrape_all_pages: {e}")
+                print(f"Unexpected error in pagination: {e}")
                 break
                 # return all_data
                 # Convert data to DataFrame
@@ -97,18 +105,20 @@ def extract_all_data_in_website():
         df = pd.DataFrame(all_data, columns=columns)
         first_excel_sheet_name = f"first_excel_sheet_{cci_config.current_date}.xlsx"
         # first_exceL_sheet_path = rf"C:\Users\mohan.7482\Desktop\CCI\incremental_cci_anti_profiteering\data\first_excel_sheet\{first_excel_sheet_name}"
-        first_exceL_sheet_path = rf"C:\Users\Premkumar.8265\Desktop\cci_project\cci_incremental\data\first_excel_sheet\{first_excel_sheet_name}"
+        first_exceL_sheet_path = rf"C:\Users\Premkumar.8265\Desktop\cci_project_personal\cci_incremental\data\first_excel_sheet\{first_excel_sheet_name}"
      
         df.to_excel(first_exceL_sheet_path, index = False)
         print("df========\n\n", df.to_string( ))
-        check_increment_data.check_increment_data(first_exceL_sheet_path)
+        # check_increment_data.check_increment_data(first_exceL_sheet_path)
     except Exception as e:
         cci_config.log_list[1] = "Failure"
         cci_config.log_list[4] = get_data_count_database.get_data_count_database()
+
         if str(e) == "Website not opened correctly":
             cci_config.log_list[5] = "Website is not opened"
         else:
             cci_config.log_list[5] = "Error in data extraction part"
+        
         print("error in data extraction part======", cci_config.log_list)
         log.insert_log_into_table(cci_config.log_list)
         cci_config.log_list = [None] * 8
